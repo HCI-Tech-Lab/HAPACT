@@ -21,7 +21,7 @@ All commands below should be run from the **`HAPACT/code/`** directory.
 git clone https://github.com/HCI-Tech-Lab/HAPACT.git
 cd HAPACT/code
 
-conda create -n hapact python=3.9 -y
+conda create -n hapact python=3.11 -y
 conda activate hapact
 pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
 ```
@@ -79,7 +79,7 @@ To use a custom body-part segmentation, modify `data/smplx_part_segmentation.jso
 
 ### 3. Download Videos and Extract Frames
 
-Video clips are downloaded from their original YouTube sources using [yt-dlp](https://github.com/yt-dlp/yt-dlp) and encoded at 24 FPS. [FFmpeg](https://ffmpeg.org/download.html) (including `ffprobe`) must be installed and available on your `PATH`. [Deno](https://docs.deno.com/runtime/getting_started/installation/) is also recommended for YouTube JavaScript challenge handling in recent yt-dlp versions.
+Video clips are downloaded from their original YouTube sources using [yt-dlp](https://github.com/yt-dlp/yt-dlp) and encoded at 24 FPS. [FFmpeg](https://ffmpeg.org/download.html) (including `ffprobe`) must be installed and available on your `PATH`. [Deno](https://docs.deno.com/runtime/getting_started/installation/) is also required for YouTube JavaScript challenge handling in recent yt-dlp versions.
 
 **Download video clips** — saves MP4 files to `data/source_clips/`:
 
