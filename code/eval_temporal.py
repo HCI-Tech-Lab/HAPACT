@@ -953,8 +953,7 @@ def eval_main():
     if verbose:
         print(json.dumps(results, indent=4))
     
-    if not os.path.exists(os.path.dirname(save_path)):
-        os.makedirs(os.path.dirname(save_path))
+    Path(save_path).parent.mkdir(parents=True, exist_ok=True)
     
     with open(save_path, "w") as f:
         f.write(json.dumps(results, indent=4))
