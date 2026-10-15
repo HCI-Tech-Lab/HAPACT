@@ -245,7 +245,7 @@ def compute_mr_ap(submission, ground_truth, iou_thds=np.linspace(0.5, 0.95, 10),
             })
     qid2ap_list = {}
     # start_time = time.time()
-    data_triples = [[qid, gt_qid2data[qid], pred_qid2data[qid]] for qid in pred_qid2data]
+    data_triples = [[qid, gt_qid2data[qid], pred_qid2data.get(qid, [])] for qid in gt_qid2data]
     from functools import partial
     compute_ap_from_triple = partial(
         compute_average_precision_detection_wrapper, tiou_thresholds=iou_thds)
@@ -302,6 +302,7 @@ def compute_mr_r1(submission, ground_truth, iou_thds=np.linspace(0.5, 0.95, 10))
 
 
 def compute_mr_miou(submission, ground_truth):
+    num_gt_queries = sum(bool(d["relevant_windows"]) for d in ground_truth)
     pred_qid2window = {}
     for d in submission:
         qid = d["qid"]
@@ -330,7 +331,7 @@ def compute_mr_miou(submission, ground_truth):
     gt_windows = np.array([gt_qid2window[k] for k in qids]).astype(float)
     pred_gt_iou = compute_temporal_iou_batch_paired(pred_windows, gt_windows)
 
-    return float(f"{np.mean(pred_gt_iou) * 100:.2f}")
+    return float(f"{np.sum(pred_gt_iou) / num_gt_queries * 100:.2f}")
 
 
 
@@ -364,7 +365,7 @@ def compute_mr_ap_by_gt(submission, ground_truth, iou_thds=np.linspace(0.5, 0.95
 
     # Calculate AP for each query
     qid2ap_list = {}
-    data_triples = [[qid, gt_qid2data[qid], pred_qid2data[qid]] for qid in pred_qid2data]
+    data_triples = [[qid, gt_qid2data[qid], pred_qid2data.get(qid, [])] for qid in gt_qid2data]
     from functools import partial
     compute_ap_from_triple = partial(
         compute_average_precision_detection_wrapper, tiou_thresholds=iou_thds)
@@ -499,22 +500,25 @@ def compute_mr_all(submission, ground_truth, iou_thds=np.linspace(0.3, 0.95, 14)
             preds = pred_qid2windows[qid]  # up to 3 predictions
 
             # Recall@1: only evaluate queries with >=1 GT and >=1 prediction
-            if len(gts) >= 1 and len(preds) >= 1:
-                matched_1, _ = match_topk_predictions_with_gts(preds[:1], gts, thd)
-                total_matched_1 += matched_1
-                total_gt_1 += min(len(gts), 1)
+            if len(gts) >= 1:
+                total_gt_1 += 1
+                if preds:
+                    matched_1, _ = match_topk_predictions_with_gts(preds[:1], gts, thd)
+                    total_matched_1 += matched_1
 
             # Recall@2: only evaluate when both GTs and preds have at least 2 segments
-            if len(gts) >= 2 and len(preds) >= 2:
-                matched_2, _ = match_topk_predictions_with_gts(preds[:2], gts, thd)
-                total_matched_2 += matched_2
-                total_gt_2 += min(len(gts), 2)
+            if len(gts) >= 2:
+                total_gt_2 += 2
+                if preds:
+                    matched_2, _ = match_topk_predictions_with_gts(preds[:2], gts, thd)
+                    total_matched_2 += matched_2
 
             # Recall@3: only evaluate when both sides have at least 3 segments
-            if len(gts) >= 3 and len(preds) >= 3:
-                matched_3, _ = match_topk_predictions_with_gts(preds[:3], gts, thd)
-                total_matched_3 += matched_3
-                total_gt_3 += min(len(gts), 3)
+            if len(gts) >= 3:
+                total_gt_3 += 3
+                if preds:
+                    matched_3, _ = match_topk_predictions_with_gts(preds[:3], gts, thd)
+                    total_matched_3 += matched_3
 
         recall_at_1 = (total_matched_1 / total_gt_1 * 100) if total_gt_1 > 0 else 0.0
         recall_at_2 = (total_matched_2 / total_gt_2 * 100) if total_gt_2 > 0 else 0.0
@@ -529,9 +533,11 @@ def compute_mr_all(submission, ground_truth, iou_thds=np.linspace(0.3, 0.95, 14)
         for qid in qids:
             gts = gt_qid2windows[qid]
             preds = pred_qid2windows[qid][:k]
-            if len(gts) >= k and len(preds) == k:
-                _, matched_ious = match_topk_predictions_with_gts(preds, gts, iou_thd=-1.0)
-                ious_all.extend(matched_ious)
+            if len(gts) >= k:
+                if preds:
+                    _, matched_ious = match_topk_predictions_with_gts(preds, gts, iou_thd=-1.0)
+                    ious_all.extend(matched_ious)
+                ious_all.extend([0.0] * (k - len(preds)))
         if len(ious_all) == 0:
             return 0.0
         return float(f"{np.mean(ious_all) * 100:.2f}")

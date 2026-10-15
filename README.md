@@ -1,6 +1,8 @@
 # HAPACT
 > HAPACT: A Benchmark For Human-Centric Physical Impact Localization in Movies
+>
 > [Youngrae Kim](https://www.linkedin.com/in/youngrae-kim-59a47a139/), [Yejin Jang](https://www.linkedin.com/in/yejin-jang-445778390/), [Eunho Kim](https://www.linkedin.com/in/eunho-kim-54059126a/), [Youjin Sung](https://youjinsung.com/), [Kun-Woo Song](https://www.linkedin.com/in/kun-woo-song-1557b2112/), [Sangpil Kim](https://kuaicv.com/professor/?theme=pub/antoniau0026hide_banners=true/), [Sang Ho Yoon](https://sanghoy.com/),
+>
 > *The Fortieth Annual Conference on Neural Information Processing Systems (NeurIPS), 2026*
 
 [![Project Page](https://img.shields.io/badge/Project-Page-326EA8?style=flat-square)](https://hci-tech-lab.github.io/HAPACT/) ![arXiv: Coming Soon](https://img.shields.io/badge/arXiv-Coming%20Soon-B31B1B?style=flat-square) [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-F2B544?style=flat-square)](https://huggingface.co/datasets/HAPACT/HAPACT-Dataset)
@@ -9,13 +11,16 @@
 
 This is the official repository for the [HAPACT: A Benchmark For Human-Centric Physical Impact Localization in Movies](https://hci-tech-lab.github.io/HAPACT/) (NeurIPS 2026).
 
-## Dataset and Code
-The HAPACT dataset is available on [Hugging Face](https://huggingface.co/datasets/HAPACT/HAPACT-Dataset). The implementation code and instructions can be found in the `code/` directory.
+## Dataset
+The HAPACT dataset is available on [Hugging Face](https://huggingface.co/datasets/HAPACT/HAPACT-Dataset).
+
+## Code
+The implementation code and instructions can be found in the `code/` directory.
 
 ## Citation
 If HAPACT contributes to your research, we would appreciate it if you could cite our paper:
 
-```json
+```bibtex
 @inproceedings{kim2026hapact,
     title={HAPACT: A Benchmark For Human-Centric Physical Impact Localization in Movies},
     author={Youngrae Kim and Yejin Jang and Eunho Kim and Youjin Sung and Kun-Woo Song and Sangpil Kim and Sang Ho Yoon},

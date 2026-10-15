@@ -224,7 +224,7 @@ To evaluate a different checkpoint, specify its directory, such as `result/cosmo
 
 ### Inference
 
-Run inference on a single image using a trained checkpoint by providing the full event description and impact query:
+Run inference on a single image using a trained checkpoint by providing an image and impact query:
 
 ```bash
 python cosmos/inference.py \
@@ -243,6 +243,6 @@ The source movie clips are obtained from *[Movieclips](https://www.youtube.com/@
 
 ## License
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](../LICENSE)
 
-This project is licensed under the [MIT License](LICENSE).
+This project is licensed under the [MIT License](../LICENSE).

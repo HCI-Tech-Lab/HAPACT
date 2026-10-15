@@ -95,11 +95,16 @@ def extract_frames(segment):
     video = cv2.VideoCapture(str(CLIP_DIR / f"{segment_id}.mp4"))
     if not video.isOpened():
         raise RuntimeError(f"Cannot open clip: {segment_id}")
+    last_image = None
     try:
         for index in range(max(pending) + 1):
             ok, image = video.read()
             if not ok:
-                raise RuntimeError(f"Missing frame {index}: {segment_id}")
+                if last_image is None or index != max(pending):
+                    raise RuntimeError(f"Missing frame {index}: {segment_id}")
+                image = last_image
+            else:
+                last_image = image
             if index in pending:
                 path = IMAGE_DIR / f"{segment_id}_{index:06d}.png"
                 partial = IMAGE_DIR / f"{segment_id}_{index:06d}.partial.png"
