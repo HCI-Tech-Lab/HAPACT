@@ -23,10 +23,10 @@ cd HAPACT/code
 
 conda create -n hapact python=3.11 -y
 conda activate hapact
-pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
+pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu118
 ```
 
-We tested the code with Python 3.11 and CUDA 11.8. For other platforms or CUDA versions, refer to the [official PyTorch installation guide](https://pytorch.org/get-started/locally/).
+We tested the code with Python 3.11, Pytorch 2.5.1 and CUDA 11.8. For other platforms or CUDA versions, refer to the [official PyTorch installation guide](https://pytorch.org/get-started/locally/).
 
 ### 2. Install Dependencies
 
@@ -187,7 +187,7 @@ We provide a LoRA fine-tuning and evaluation pipeline for [Cosmos-Reason2](https
 
 ### Training
 
-Train Cosmos-Reason2-8B using the spatial benchmark and evaluate the saved checkpoints on the validation split (At least 96 GB of GPU memory is recommended for training):
+Train Cosmos-Reason2-8B using the spatial benchmark and evaluate the saved checkpoints on the validation split (At least 48 GB of GPU memory is recommended for training):
 
 ```bash
 python cosmos/train.py --run_region_eval \

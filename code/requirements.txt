@@ -4,6 +4,7 @@ opencv-python>=4.8,<4.12
 huggingface_hub[hf_xet]>=0.34,<1.0
 yt-dlp[default]
 transformers==4.57.1
+pyarrow==20.0.0
 datasets>=3.0,<4.0
 accelerate>=1.4,<2
 peft==0.17.1

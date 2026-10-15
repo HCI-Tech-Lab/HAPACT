@@ -498,6 +498,7 @@ def main():
         fp16=args.fp16,
 
         gradient_checkpointing=True,
+        gradient_checkpointing_kwargs={"use_reentrant": False},
         remove_unused_columns=False,
         dataloader_num_workers=args.num_workers,
     )
