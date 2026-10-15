@@ -26,7 +26,7 @@ conda activate hapact
 pip install torch==2.1.0 torchvision==0.16.0 torchaudio==2.1.0 --index-url https://download.pytorch.org/whl/cu118
 ```
 
-We tested the code with Python 3.9 and CUDA 11.8. For other platforms or CUDA versions, refer to the [official PyTorch installation guide](https://pytorch.org/get-started/locally/).
+We tested the code with Python 3.11 and CUDA 11.8. For other platforms or CUDA versions, refer to the [official PyTorch installation guide](https://pytorch.org/get-started/locally/).
 
 ### 2. Install Dependencies
 
