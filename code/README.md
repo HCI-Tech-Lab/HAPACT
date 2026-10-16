@@ -5,11 +5,11 @@ This code is the official implementation of the paper **HAPACT: A Benchmark For 
 <!-- TODO: Link the paper title to its NeurIPS proceedings page when available. -->
 <!-- [paper]: TODO_NEURIPS_PROCEEDINGS_URL -->
 
-[![Project Page](https://img.shields.io/badge/Project-Page-326EA8?style=flat-square)](https://hci-tech-lab.github.io/HAPACT/) ![arXiv: Coming Soon](https://img.shields.io/badge/arXiv-Coming%20Soon-B31B1B?style=flat-square) [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-F2B544?style=flat-square)](https://huggingface.co/datasets/HAPACT/HAPACT-Dataset)
+[![Project Page](https://img.shields.io/badge/Project-Page-326EA8?style=flat-square)](https://hapact.hcitech.org/) ![arXiv: Coming Soon](https://img.shields.io/badge/arXiv-Coming%20Soon-B31B1B?style=flat-square) [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-F2B544?style=flat-square)](https://huggingface.co/datasets/HAPACT/HAPACT-Dataset)
 
 <!-- TODO: Replace the arXiv placeholder with a linked badge once the preprint is available. -->
 
-This directory provides code for preparing the HAPACT dataset and source videos, along with code for the temporal and spatial benchmarks and for training and evaluating the MLLM baseline model. For an overview of the project and paper, see the [project page](https://hci-tech-lab.github.io/HAPACT/).
+This directory provides code for preparing the HAPACT dataset and source videos, along with code for the temporal and spatial benchmarks and for training and evaluating the MLLM baseline model. For an overview of the project and paper, see the [project page](https://hapact.hcitech.org/).
 
 All commands below should be run from the **`HAPACT/code/`** directory.
 
