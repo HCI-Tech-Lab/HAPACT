@@ -1,6 +1,5 @@
 import argparse
 import json
-import re
 from pathlib import Path
 
 import numpy as np
@@ -42,10 +41,7 @@ def load_predictions(path, gt_keys, field):
 def load_regions(path):
     with open(path, "r", encoding="utf-8") as f:
         segmentation = json.load(f)
-    return {
-        re.sub(r"([a-z])([A-Z])", r"\1 \2", name).lower().replace("fore arm", "forearm"): vertices
-        for name, vertices in segmentation.items()
-    }
+    return {name: part["vertices"] for name, part in segmentation.items()}
 
 
 def compute_sample_metrics(pred, gt, eps=1e-8):

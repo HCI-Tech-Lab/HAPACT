@@ -6,7 +6,7 @@ import torch
 from peft import PeftModel
 from transformers import AutoProcessor, Qwen3VLForConditionalGeneration
 
-from eval import DATA_DIR, OUTPUT_DIR, align_special_tokens, extract_region_names_from_prompt, parse_regions_from_output
+from eval import DATA_DIR, OUTPUT_DIR, align_special_tokens, extract_region_names_from_prompt, load_region_mapping, parse_regions_from_output
 
 
 def main():
@@ -28,6 +28,10 @@ def main():
     region_names = extract_region_names_from_prompt(first_row["prompt"])
     if not region_names:
         raise ValueError("No region choices found in the training benchmark prompt.")
+
+    description_to_id = load_region_mapping(DATA_DIR / "smplx_part_segmentation.json")
+    if {name.lower() for name in region_names} != set(description_to_id):
+        raise ValueError("Prompt regions do not match segmentation descriptions.")
 
     prompt = (
         "You are observing a movie frame. "
@@ -83,7 +87,7 @@ def main():
         skip_special_tokens=True,
         clean_up_tokenization_spaces=False,
     )[0].strip()
-    pred_regions = parse_regions_from_output(raw_output, region_names)
+    pred_regions = [description_to_id[name.lower()] for name in parse_regions_from_output(raw_output, region_names)]
 
     print("\nRaw Output:")
     print(raw_output)

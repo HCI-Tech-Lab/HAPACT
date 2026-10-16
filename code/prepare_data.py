@@ -1,7 +1,6 @@
 import argparse
 import hashlib
 import json
-import re
 from pathlib import Path
 
 import numpy as np
@@ -80,9 +79,8 @@ def temporal_rows(records):
 
 
 def spatial_rows(records, segmentation):
-    parts = [(re.sub(r"([a-z])([A-Z])", r"\1 \2", name).lower().replace("fore arm", "forearm"), set(vertices))
-             for name, vertices in segmentation.items()]
-    region_names = ", ".join(name for name, _ in parts)
+    parts = [(name, set(part["vertices"])) for name, part in segmentation.items()]
+    region_names = ", ".join(part["description"] for part in segmentation.values())
 
     for record in records:
         segment_id = record["segment_id"]
@@ -95,12 +93,14 @@ def spatial_rows(records, segmentation):
                 if not regions:
                     regions = [max(scores, key=lambda item: item[1])[0]]
 
-                if len(regions) == 1:
-                    answer = f"The affected body region is {regions[0]}."
-                elif len(regions) == 2:
-                    answer = f"The affected body regions are {regions[0]} and {regions[1]}."
+                descriptions = [segmentation[name]["description"] for name in regions]
+
+                if len(descriptions) == 1:
+                    answer = f"The affected body region is {descriptions[0]}."
+                elif len(descriptions) == 2:
+                    answer = f"The affected body regions are {descriptions[0]} and {descriptions[1]}."
                 else:
-                    answer = f"The affected body regions are {', '.join(regions[:-1])}, and {regions[-1]}."
+                    answer = f"The affected body regions are {', '.join(descriptions[:-1])}, and {descriptions[-1]}."
 
                 query = record["sub_sentences"][sentence_id]
                 prompt = (
@@ -148,6 +148,17 @@ def main():
     if args.spatial:
         with (DATA_DIR / "smplx_part_segmentation.json").open("r", encoding="utf-8") as f:
             segmentation = json.load(f)
+
+        descriptions = set()
+        for region_id, part in segmentation.items():
+            description = part["description"]
+            if not isinstance(description, str) or not description.strip() or any(c in description for c in ",."):
+                raise ValueError(f"Invalid description for {region_id}: {description!r}")
+
+            key = description.strip().lower()
+            if key in descriptions:
+                raise ValueError(f"Duplicate description: {description!r}")
+            descriptions.add(key)
 
     for split in SPLITS:
         input_path = DATA_DIR / f"hapact_{split}.json"

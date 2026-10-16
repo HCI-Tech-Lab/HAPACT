@@ -43,6 +43,25 @@ def resolve_image_path(imgname, image_root, strip_image_prefix=None):
 
 
 
+def load_region_mapping(path):
+    with open(path, "r", encoding="utf-8") as f:
+        segmentation = json.load(f)
+
+    mapping = {}
+    for region_id, part in segmentation.items():
+        description = part["description"]
+        if not isinstance(description, str) or not description.strip() or any(c in description for c in ",."):
+            raise ValueError(f"Invalid description for {region_id}: {description!r}")
+
+        key = description.strip().lower()
+        if key in mapping:
+            raise ValueError(f"Duplicate description: {description!r}")
+        mapping[key] = region_id
+
+    return mapping
+
+
+
 def extract_region_names_from_prompt(prompt):
     marker = "The possible body regions are:"
     if marker not in prompt:
@@ -69,18 +88,18 @@ def parse_regions_from_output(text, region_names):
     if idx >= 0:
         lower = lower[idx:]
 
-    pred = []
+    matched = set()
+    occupied = []
 
-    # Prevents "right arm" matching before "right upper arm" if both exist.
     for region in sorted(region_names, key=len, reverse=True):
-        r = region.lower()
-        # region names include spaces, slash-free; exact substring is okay here.
-        if re.search(rf"(?<![a-zA-Z]){re.escape(r)}(?![a-zA-Z])", lower):
-            pred.append(region)
+        pattern = rf"(?<!\w){re.escape(region.lower())}(?!\w)"
+        for match in re.finditer(pattern, lower):
+            if any(match.start() < end and start < match.end() for start, end in occupied):
+                continue
+            occupied.append(match.span())
+            matched.add(region)
 
-    pred = sorted(set(pred), key=lambda x: region_names.index(x) if x in region_names else 999)
-
-    return pred
+    return [region for region in region_names if region in matched]
 
 
 
@@ -140,6 +159,10 @@ def main():
     region_names = extract_region_names_from_prompt(dataset[0]["prompt"])
     if not region_names:
         raise ValueError("No region choices found in the benchmark prompt.")
+
+    description_to_id = load_region_mapping(DATA_DIR / "smplx_part_segmentation.json")
+    if {name.lower() for name in region_names} != set(description_to_id):
+        raise ValueError("Prompt regions do not match segmentation descriptions.")
 
     print("num eval samples:", len(dataset))
     print("regions:", region_names)
@@ -205,7 +228,7 @@ def main():
             skip_special_tokens=True,
             clean_up_tokenization_spaces=False,
         )[0].strip()
-        pred_regions = parse_regions_from_output(raw_output, region_names)
+        pred_regions = [description_to_id[name.lower()] for name in parse_regions_from_output(raw_output, region_names)]
 
         pred_records.append({
             "segment_id": ex["segment_id"],

@@ -75,7 +75,7 @@ python prepare_data.py --spatial
 hf download HAPACT/HAPACT smplx_neutral_geodesic_dist.npy --repo-type dataset --local-dir ./data
 ```
 
-To use a custom body-part segmentation, modify `data/smplx_part_segmentation.json` by specifying the SMPL-X vertex indices corresponding to each body region before running with `--spatial`.
+To use a custom body-part segmentation, modify `data/smplx_part_segmentation.json`. Each region is defined by a unique `label` (ID), a natural-language `description`, and a list of SMPL-X `vertices`. The descriptions are used for model prompts and responses, while the region labels are used for benchmark annotations and predictions.
 
 ### 3. Download Videos and Extract Frames
 
@@ -161,13 +161,13 @@ Generate predictions using your own model and save them as `data/spatial/predict
 **Region-label predictions** — use region names defined in `data/smplx_part_segmentation.json`:
 
 ```json
-{"segment_id":"example_segment_id","sentence_id":"0","target_frame":120,"pred_regions":["left forearm","right hand"]}
+{"segment_id":"example_segment_id","sentence_id":"S1","target_frame":120,"pred_regions":["LeftForeArm","RightHand"]}
 ```
 
 **Vertex predictions** — use SMPL-X vertex indices (0–10474):
 
 ```json
-{"segment_id":"example_segment_id","sentence_id":"0","target_frame":120,"pred_vertices":[105,106,107,108]}
+{"segment_id":"example_segment_id","sentence_id":"S1","target_frame":120,"pred_vertices":[105,106,107,108]}
 ```
 
 Run the evaluation for the desired mode:
