@@ -5,7 +5,7 @@ This code is the official implementation of the paper **HAPACT: A Benchmark For 
 <!-- TODO: Link the paper title to its NeurIPS proceedings page when available. -->
 <!-- [paper]: TODO_NEURIPS_PROCEEDINGS_URL -->
 
-[![Project Page](https://img.shields.io/badge/Project-Page-326EA8?style=flat-square)](https://hapact.hcitech.org/) ![arXiv: Coming Soon](https://img.shields.io/badge/arXiv-Coming%20Soon-B31B1B?style=flat-square) [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-F2B544?style=flat-square)](https://huggingface.co/datasets/HAPACT/HAPACT-Dataset)
+[![Project Page](https://img.shields.io/badge/Project-Page-326EA8?style=flat-square)](https://hapact.hcitech.org/) [![arXiv](https://img.shields.io/badge/arXiv-2610.22895-B31B1B?style=flat-square)](https://arxiv.org/abs/2610.22895) [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-F2B544?style=flat-square)](https://huggingface.co/datasets/HAPACT/HAPACT-Dataset)
 
 <!-- TODO: Replace the arXiv placeholder with a linked badge once the preprint is available. -->
 
@@ -199,7 +199,7 @@ The best checkpoint is saved to `<OUTPUT_DIR>/best_region_checkpoint/`, along wi
 
 ### Evaluation
 
-Evaluate a trained checkpoint on the validation or test split using `--resume` to specify the checkpoint directory. At least 32 GB of GPU memory is required for inference.
+Evaluate a trained checkpoint on the validation or test split using `--resume` to specify the checkpoint directory. At least 24 GB of GPU memory is required for inference.
 
 **Validation:**
 

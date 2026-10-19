@@ -148,6 +148,7 @@ def main():
     parser.add_argument("--image_root", default=str(DATA_DIR / "images"))
     parser.add_argument("--save_prediction_path", default=str(OUTPUT_DIR / "prediction.jsonl"))
     parser.add_argument("--save_metrics_path", default=None)
+    parser.add_argument("--vertex_eval", action="store_true")
     parser.add_argument("--input_modality", choices=["full", "text_only", "image_only"], default="full")
     parser.add_argument("--max_new_tokens", type=int, default=64)
     parser.add_argument("--strip_image_prefix", default=None)
@@ -163,6 +164,9 @@ def main():
     description_to_id = load_region_mapping(DATA_DIR / "smplx_part_segmentation.json")
     if {name.lower() for name in region_names} != set(description_to_id):
         raise ValueError("Prompt regions do not match segmentation descriptions.")
+    if args.vertex_eval:
+        with (DATA_DIR / "smplx_part_segmentation.json").open("r", encoding="utf-8") as f:
+            segmentation = json.load(f)
 
     print("num eval samples:", len(dataset))
     print("regions:", region_names)
@@ -236,6 +240,14 @@ def main():
             "target_frame": ex["target_frame"],
             "pred_regions": pred_regions,
         })
+        
+        if args.vertex_eval:
+            pred_records[-1]["pred_vertices"] = sorted({
+                vertex
+                for region in pred_regions
+                for vertex in segmentation[region]["vertices"]
+            })
+
 
     prediction_path = Path(args.save_prediction_path)
     metrics_path = Path(args.save_metrics_path) if args.save_metrics_path else OUTPUT_DIR / f"{args.split}_metrics.json"
@@ -252,6 +264,20 @@ def main():
     subprocess.run(cmd, check=True)
     print("saved predictions:", prediction_path)
     print("saved metrics:", metrics_path)
+
+    if args.vertex_eval:
+        vertex_metrics_path = metrics_path.with_name("vertex_metrics.json")
+        vertex_cmd = [
+            sys.executable,
+            str(CODE_DIR / "eval_spatial.py"),
+            "--split", args.split,
+            "--vertex",
+            "--submission_path", str(prediction_path),
+            "--save_path", str(vertex_metrics_path),
+        ]
+        subprocess.run(vertex_cmd, check=True)
+        print("saved vertex metrics:", vertex_metrics_path)
+
 
 
 if __name__ == "__main__":

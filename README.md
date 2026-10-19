@@ -5,7 +5,7 @@
 >
 > *The Fortieth Annual Conference on Neural Information Processing Systems (NeurIPS), 2026*
 
-[![Project Page](https://img.shields.io/badge/Project-Page-326EA8?style=flat-square)](https://hapact.hcitech.org/) ![arXiv: Coming Soon](https://img.shields.io/badge/arXiv-Coming%20Soon-B31B1B?style=flat-square) [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-F2B544?style=flat-square)](https://huggingface.co/datasets/HAPACT/HAPACT-Dataset)
+[![Project Page](https://img.shields.io/badge/Project-Page-326EA8?style=flat-square)](https://hapact.hcitech.org/) [![arXiv](https://img.shields.io/badge/arXiv-2610.22895-B31B1B?style=flat-square)](https://arxiv.org/abs/2610.22895) [![Hugging Face](https://img.shields.io/badge/Hugging%20Face-Dataset-F2B544?style=flat-square)](https://huggingface.co/datasets/HAPACT/HAPACT-Dataset)
 
 ![Teaser](static/images/Teaser.png)
 
